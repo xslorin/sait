@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вопросы по 200</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <div id="app">
+    <h1>Вопросы по 200</h1>
+    <div id="question-number">Вопрос: <span id="current-question">1</span>/15</div>
+    <div id="question">
+      <h2 id="question-text"></h2>
+      <div id="answers">
+        <button onclick="checkAnswer(0)" id="answer-0"></button>
+        <button onclick="checkAnswer(1)" id="answer-1"></button>
+        <button onclick="checkAnswer(2)" id="answer-2"></button>
+      </div>
+      <div id="explanation" class="explanation"></div>
+      <button id="next-question" style="display: none;" onclick="nextQuestion()">Следующий вопрос</button>
+    </div>
+    <div id="timer" class="timer">Осталось: 10:00</div>
+    <a href="../index.html" class="back-link">Назад</a>
+  </div>
+  <script>
+    const questions = [
+      {
+        question: "Какой танк использовался в Первой мировой войне?",
+        answers: ["Т-34", "Mark V", "ИС-2"],
+        correct: 1,
+        explanation: "Mark V — британский танк, использовавшийся в Первой мировой войне."
+      },
+      {
+        question: "Какой самолет использовался в Великой Отечественной войне?",
+        answers: ["МиГ-21", "Ил-2", "Су-27"],
+        correct: 1,
+        explanation: "Ил-2 — штурмовик, использовавшийся в Великой Отечественной войне."
+      },
+      {
+        question: "Какой корабль был символом обороны Ленинграда?",
+        answers: ["Аврора", "Варяг", "Адмирал Нахимов"],
+        correct: 0,
+        explanation: "Аврора — крейсер, ставший символом обороны Ленинграда."
+      },
+      {
+        question: "Какой ракетный комплекс был разработан в СССР?",
+        answers: ["Точка", "Першинг", "Скад"],
+        correct: 2,
+        explanation: "Скад — советский ракетный комплекс."
+      },
+      {
+        question: "Какой танк стал символом Великой Отечественной войны?",
+        answers: ["Т-34", "КВ-1", "ИС-2"],
+        correct: 0,
+        explanation: "Т-34 — советский танк, ставший символом Великой Отечественной войны."
+      },
+      {
+        question: "Какой самолет был первым реактивным истребителем в СССР?",
+        answers: ["МиГ-15", "Ла-15", "Як-25"],
+        correct: 0,
+        explanation: "МиГ-15 — первый реактивный истребитель в СССР."
+      },
+      {
+        question: "Какой корабль был первым советским атомным подводным лодкой?",
+        answers: ["К-19", "К-3", "К-1"],
+        correct: 1,
+        explanation: "К-3 — первая советская атомная подводная лодка."
+      },
+      {
+        question: "Какой танк был основным в Советской Армии во время Второй мировой войны?",
+        answers: ["Т-34", "КВ-1", "ИС-2"],
+        correct: 0,
+        explanation: "Т-34 — основной танк Советской Армии во время Второй мировой войны."
+      },
+      {
+        question: "Какой самолет был первым пассажирским реактивным самолетом?",
+        answers: ["Ту-104", "Ил-18", "Ту-134"],
+        correct: 0,
+        explanation: "Ту-104 — первый пассажирский реактивный самолет."
+      },
+      {
+        question: "Какой ракетный комплекс использовался для защиты Москвы?",
+        answers: ["С-75", "С-200", "С-300"],
+        correct: 0,
+        explanation: "С-75 — ракетный комплекс, использовавшийся для защиты Москвы."
+      },
+      {
+        question: "Какой танк был разработан в СССР в конце Второй мировой войны?",
+        answers: ["Т-34", "КВ-1", "ИС-2"],
+        correct: 2,
+        explanation: "ИС-2 — советский тяжелый танк, разработанный в конце Второй мировой войны."
+      },
+      {
+        question: "Какой самолет был первым советским сверхзвуковым истребителем?",
+        answers: ["МиГ-21", "Су-7", "Як-28"],
+        correct: 0,
+        explanation: "МиГ-21 — первый советский сверхзвуковой истребитель."
+      },
+      {
+        question: "Какой корабль был первым советским авианосцем?",
+        answers: ["Адмирал Кузнецов", "Ленин", "Киев"],
+        correct: 2,
+        explanation: "Киев — первый советский авианосец."
+      },
+      {
+        question: "Какой танк был первым в мире с башней в центре корпуса?",
+        answers: ["Т-34", "КВ-1", "Матильда"],
+        correct: 0,
+        explanation: "Т-34 — первый танк в мире с башней в центре корпуса."
+      },
+      {
+        question: "Какой самолет был первым советским стратегическим бомбардировщиком?",
+        answers: ["Ту-95", "Ил-4", "Пе-8"],
+        correct: 2,
+        explanation: "Пе-8 — первый советский стратегический бомбардировщик."
+      }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let timer;
+    let totalTime = 600; // Общее время для всей викторины (10 минут)
+
+    function showQuestion() {
+      const question = questions[currentQuestionIndex];
+      document.getElementById('question-text').textContent = question.question;
+      document.getElementById('answer-0').textContent = question.answers[0];
+      document.getElementById('answer-1').textContent = question.answers[1];
+      document.getElementById('answer-2').textContent = question.answers[2];
+      document.getElementById('current-question').textContent = currentQuestionIndex + 1;
+      document.getElementById('next-question').style.display = 'none'; // Скрываем кнопку "Следующий вопрос"
+      // Разблокируем кнопки для текущего вопроса
+      document.querySelectorAll('button').forEach(btn => btn.disabled = false);
+    }
+
+    function checkAnswer(selectedIndex) {
+      const question = questions[currentQuestionIndex];
+      if (selectedIndex === question.correct) {
+        score += 10; // Добавляем 20 очков за правильный ответ
+        alert('Правильно!');
+        nextQuestion(); // Переходим к следующему вопросу
+      } else {
+        // Объяснение, почему правильный ответ именно такой
+        document.getElementById('explanation').textContent = `Правильный ответ: ${question.answers[question.correct]}. ${question.explanation}`;
+        // Блокируем кнопки текущего вопроса
+        document.querySelectorAll('#answers button').forEach(btn => btn.disabled = true);
+        // Показываем кнопку "Следующий вопрос"
+        document.getElementById('next-question').style.display = 'block';
+      }
+    }
+
+    function nextQuestion() {
+      currentQuestionIndex++;
+      if (currentQuestionIndex < questions.length && totalTime > 0) {
+        showQuestion(); // Переходим к следующему вопросу
+      } else {
+        clearInterval(timer);
+        alert(`Вы ответили правильно на ${score / 20} из 15 вопросов и заработали ${score} очков!`);
+        localStorage.setItem('score-200', score); // Сохраняем очки за вопросы по 200
+        window.location.href = '../index.html'; // Переходим на главную страницу после завершения викторины
+      }
+    }
+
+    function startTimer() {
+      timer = setInterval(() => {
+        totalTime--;
+        if (totalTime <= 0) {
+          clearInterval(timer);
+          alert('Время вышло!');
+          nextQuestion(); // Переходим к следующему вопросу, если время вышло
+        } else {
+          const minutes = Math.floor(totalTime / 60);
+          const seconds = totalTime % 60;
+          document.getElementById('timer').textContent = `Осталось: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        }
+      }, 1000);
+    }
+
+    showQuestion();
+    startTimer();
+  </script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Своя игра: 23 февраля</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <h1>Своя игра: 23 февраля</h1>
+    <div id="score">Счет: <span id="score-value">0</span></div>
+    <div id="categories">
+      <div class="category">История</div>
+      <div class="category">Военная техника</div>
+      <div class="category">Личности</div>
+      <div class="category">Герои 2 Мировой Войны</div>
+      <div class="category">Культура</div>
+    </div>
+    <div id="questions">
+      <a href="questions/question-100.html" class="question" data-points="100" id="question-100">100</a>
+      <a href="questions/question-200.html" class="question" data-points="200" id="question-200">200</a>
+      <a href="questions/question-300.html" class="question" data-points="300" id="question-300">300</a>
+      <a href="questions/question-400.html" class="question" data-points="400" id="question-400">400</a>
+      <a href="questions/question-500.html" class="question" data-points="500" id="question-500">500</a>
+    </div>
+
+    <!-- Кнопка регистрации в правом верхнем углу -->
+    <div id="register-button">
+      <a href="registration.html" class="button">Регистрация</a>
+    </div>
+
+    <!-- Таблица с оценками в правом нижнем углу -->
+    <div id="rating-table">
+      <table>
+        <tr>
+          <td>500 очков</td>
+          <td>Оценка 5</td>
+        </tr>
+        <tr>
+          <td>400 очков</td>
+          <td> Оценка 4</td>
+        </tr>
+        <tr>
+          <td>300 очков</td>
+          <td> Оценка 3</td>
+        </tr>
+        <tr>
+          <td>Меньше</td>
+          <td> Оценка 2</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Надпись в левом нижнем углу -->
+    <div id="made-with">
+      Сделано с помощью нейросеть deepseek
+    </div>
+
+    <!-- Информация о пользователе -->
+    <div id="user-info">
+      <h2>Информация о пользователе</h2>
+      <p>Фамилия: <span id="user-last-name"></span></p>
+      <p>Имя: <span id="user-first-name"></span></p>
+      <p>Группа: <span id="user-group"></span></p>
+    </div>
+  </div>
+  <script>
+    // Получаем очки из localStorage
+    const score100 = localStorage.getItem('score-100') || 0;
+    const score200 = localStorage.getItem('score-200') || 0;
+    const score300 = localStorage.getItem('score-300') || 0;
+    const score400 = localStorage.getItem('score-400') || 0;
+    const score500 = localStorage.getItem('score-500') || 0;
+
+    const totalScore = parseInt(score100) + parseInt(score200) + parseInt(score300) + parseInt(score400) + parseInt(score500);
+    document.getElementById('score-value').textContent = totalScore;
+
+    // Проверяем, все ли викторины пройдены
+    if (totalScore === 750) { // 15 вопросов * 10 очков * 5 викторин
+      alert(`Всего вы набрали ${totalScore} очков! Вы молодцы!!!`);
+    }
+
+    // Отображаем информацию о пользователе
+    const userLastName = localStorage.getItem('userLastName') || 'Не указано';
+    const userFirstName = localStorage.getItem('userFirstName') || 'Не указано';
+    const userGroup = localStorage.getItem('userGroup') || 'Не указано';
+
+    document.getElementById('user-last-name').textContent = userLastName;
+    document.getElementById('user-first-name').textContent = userFirstName;
+    document.getElementById('user-group').textContent = userGroup;
+  </script>
+</body>
+</html>

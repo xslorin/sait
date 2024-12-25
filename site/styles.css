@@ -1,0 +1,197 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  background-color: #1a1a2e; /* Темно-синий фон */
+  color: white;
+}
+
+#app {
+  padding: 20px;
+  position: relative; /* Для позиционирования элементов */
+}
+
+h1 {
+  color: #ffcc00; /* Темно-желтый цвет для заголовка */
+}
+
+#score {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+#categories {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+  background-color: #16213e; /* Темно-синий фон для категорий */
+  color: #ffcc00; /* Темно-желтый цвет для текста категорий */
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.category {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+#questions {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  padding: 20px;
+}
+
+.question {
+  background-color: #0f3460; /* Темно-синий фон для вопросов */
+  color: white;
+  padding: 20px;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  text-decoration: none;
+  display: block;
+}
+
+.question:hover {
+  background-color: #1a1a2e; /* Темно-синий фон при наведении */
+}
+
+.question.answered {
+  background-color: #444; /* Серый фон для отвеченных вопросов */
+  cursor: not-allowed;
+}
+
+.question.wrong {
+  background-color: #ff4d4d; /* Красный фон для неправильных ответов */
+}
+
+.explanation {
+  margin-top: 20px;
+  font-style: italic;
+  color: #ddd;
+}
+
+.timer {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #ffcc00; /* Темно-желтый цвет для таймера */
+}
+
+button {
+  background-color: #ffcc00; /* Темно-желтый фон для кнопок */
+  color: #1a1a2e; /* Темно-синий цвет для текста кнопок */
+  border: none;
+  padding: 10px 20px;
+  margin: 5px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #e6b800; /* Темно-желтый фон при наведении */
+}
+
+.back-link {
+  display: inline-block;
+  margin-top: 20px;
+  color: #ffcc00;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+/* Кнопка регистрации */
+#register-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+#register-button .button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+#register-button .button:hover {
+  background-color: #0056b3;
+}
+
+/* Таблица с оценками */
+#rating-table {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  font-size: 14px;
+}
+
+#rating-table table {
+  border-collapse: collapse;
+  color: #ffcc00;
+}
+
+#rating-table td {
+  padding: 5px 10px;
+  border: 1px solid #ffcc00;
+}
+
+/* Добавляем стили для текста "Сделано с помощью нейросеть deepseek" в левом нижнем углу */
+#made-with {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  font-size: 16px;
+  color: #000000;
+}
+
+/* Информация о пользователе */
+#user-info {
+  margin-top: 40px;
+  font-size: 18px;
+  color: #ffcc00;
+}
+
+#user-info h2 {
+  margin-bottom: 10px;
+}
+
+#user-info p {
+  margin: 5px 0;
+}
+
+/* Форма регистрации */
+#registration-form {
+  margin-top: 20px;
+}
+
+#registration-form label {
+  font-size: 18px;
+  color: #ffcc00;
+}
+
+#registration-form input {
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ffcc00;
+  border-radius: 5px;
+  background-color: #1a1a2e;
+  color: white;
+  font-size: 16px;
+}
+
+#registration-form button {
+  margin-top: 20px;
+}

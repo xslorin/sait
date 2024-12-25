@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вопросы по 500</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <div id="app">
+    <h1>Вопросы по 500</h1>
+    <div id="question-number">Вопрос: <span id="current-question">1</span>/15</div>
+    <div id="question">
+      <h2 id="question-text"></h2>
+      <div id="answers">
+        <button onclick="checkAnswer(0)" id="answer-0"></button>
+        <button onclick="checkAnswer(1)" id="answer-1"></button>
+        <button onclick="checkAnswer(2)" id="answer-2"></button>
+      </div>
+      <div id="explanation" class="explanation"></div>
+      <button id="next-question" style="display: none;" onclick="nextQuestion()">Следующий вопрос</button>
+    </div>
+    <div id="timer" class="timer">Осталось: 10:00</div>
+    <a href="../index.html" class="back-link">Назад</a>
+  </div>
+  <script>
+    const questions = [
+      {
+        question: "Какой фильм посвящен Великой Отечественной войне?",
+        answers: ["Броненосец Потемкин", "Иди и смотри", "Остров сокровищ"],
+        correct: 1,
+        explanation: "Иди и смотри — фильм, посвященный Великой Отечественной войне."
+      },
+      {
+        question: "Какая песня стала гимном защитников Отечества?",
+        answers: ["Катюша", "Священная война", "Патриот"],
+        correct: 1,
+        explanation: "Священная война — песня, ставшая гимном защитников Отечества."
+      },
+      {
+        question: "Какой писатель написал роман о войне?",
+        answers: ["Александр Пушкин", "Михаил Шолохов", "Лев Толстой"],
+        correct: 1,
+        explanation: "Михаил Шолохов написал роман Тихий Дон, посвященный войне."
+      },
+      {
+        question: "Какой музей посвящен военной истории?",
+        answers: ["Эрмитаж", "Музей Победы", "Третьяковская галерея"],
+        correct: 1,
+        explanation: "Музей Победы посвящен военной истории."
+      },
+      {
+        question: "Какой праздник отмечается 9 мая?",
+        answers: ["День Победы", "День России", "День космонавтики"],
+        correct: 0,
+        explanation: "9 мая отмечается День Победы."
+      },
+      {
+        question: "Какой фильм посвящен битве за Москву?",
+        answers: ["Офицеры", "Битва за Москву", "Свой среди чужих"],
+        correct: 1,
+        explanation: "Битва за Москву — фильм, посвященный битве за Москву."
+      },
+      {
+        question: "Какая песня стала символом Великой Отечественной войны?",
+        answers: ["Катюша", "Священная война", "Патриот"],
+        correct: 0,
+        explanation: "Катюша — песня, ставшая символом Великой Отечественной войны."
+      },
+      {
+        question: "Какой композитор написал гимн СССР?",
+        answers: ["Дмитрий Шостакович", "Александр Александров", "Сергей Прокофьев"],
+        correct: 1,
+        explanation: "Александр Александров написал гимн СССР."
+      },
+      {
+        question: "Какой фильм посвящен Сталинграду?",
+        answers: ["Сталинград", "Битва за Москву", "Офицеры"],
+        correct: 0,
+        explanation: "Сталинград — фильм, посвященный битве за Сталинград."
+      },
+      {
+        question: "Какая песня стала гимном Советской армии?",
+        answers: ["Священная война", "Катюша", "Патриот"],
+        correct: 0,
+        explanation: "Священная война — песня, ставшая гимном Советской армии."
+      },
+      {
+        question: "Какой фильм посвящен подвигу защитников Брестской крепости?",
+        answers: ["Брестская крепость", "Офицеры", "Битва за Москву"],
+        correct: 0,
+        explanation: "Брестская крепость — фильм, посвященный подвигу защитников Брестской крепости."
+      },
+      {
+        question: "Какая песня стала символом партизанского движения?",
+        answers: ["Катюша", "Священная война", "Партизанская тихая"],
+        correct: 2,
+        explanation: "Партизанская тихая — песня, ставшая символом партизанского движения."
+      },
+      {
+        question: "Какой фильм посвящен подвигу защитников Особого района?",
+        answers: ["Особое задание", "Офицеры", "Битва за Москву"],
+        correct: 0,
+        explanation: "Особое задание — фильм, посвященный подвигу защитников Особого района."
+      },
+      {
+        question: "Какая песня стала гимном партизан?",
+        answers: ["Катюша", "Священная война", "Партизанская тихая"],
+        correct: 2,
+        explanation: "Партизанская тихая — песня, ставшая гимном партизан."
+      },
+      {
+        question: "Какой фильм посвящен подвигу защитников Ленинграда?",
+        answers: ["Ленинград", "Офицеры", "Битва за Москву"],
+        correct: 0,
+        explanation: "Ленинград — фильм, посвященный подвигу защитников Ленинграда."
+      }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let timer;
+    let totalTime = 600; // Общее время для всей викторины (10 минут)
+
+    function showQuestion() {
+      const question = questions[currentQuestionIndex];
+      document.getElementById('question-text').textContent = question.question;
+      document.getElementById('answer-0').textContent = question.answers[0];
+      document.getElementById('answer-1').textContent = question.answers[1];
+      document.getElementById('answer-2').textContent = question.answers[2];
+      document.getElementById('current-question').textContent = currentQuestionIndex + 1;
+      document.getElementById('next-question').style.display = 'none'; // Скрываем кнопку "Следующий вопрос"
+      // Разблокируем кнопки для текущего вопроса
+      document.querySelectorAll('button').forEach(btn => btn.disabled = false);
+    }
+
+    function checkAnswer(selectedIndex) {
+      const question = questions[currentQuestionIndex];
+      if (selectedIndex === question.correct) {
+        score += 10; // Добавляем 10 очков за правильный ответ
+        alert('Правильно!');
+        nextQuestion(); // Переходим к следующему вопросу
+      } else {
+        // Объяснение, почему правильный ответ именно такой
+        document.getElementById('explanation').textContent = `Правильный ответ: ${question.answers[question.correct]}. ${question.explanation}`;
+        // Блокируем кнопки текущего вопроса
+        document.querySelectorAll('#answers button').forEach(btn => btn.disabled = true);
+        // Показываем кнопку "Следующий вопрос"
+        document.getElementById('next-question').style.display = 'block';
+      }
+    }
+
+    function nextQuestion() {
+      currentQuestionIndex++;
+      if (currentQuestionIndex < questions.length && totalTime > 0) {
+        showQuestion(); // Переходим к следующему вопросу
+      } else {
+        clearInterval(timer);
+        alert(`Вы ответили правильно на ${score / 10} из 15 вопросов и заработали ${score} очков!`);
+        localStorage.setItem('score-500', score); // Сохраняем очки за вопросы по 500
+        window.location.href = '../index.html'; // Переходим на главную страницу после завершения викторины
+      }
+    }
+
+    function startTimer() {
+      timer = setInterval(() => {
+        totalTime--;
+        if (totalTime <= 0) {
+          clearInterval(timer);
+          alert('Время вышло!');
+          nextQuestion(); // Переходим к следующему вопросу, если время вышло
+        } else {
+          const minutes = Math.floor(totalTime / 60);
+          const seconds = totalTime % 60;
+          document.getElementById('timer').textContent = `Осталось: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        }
+      }, 1000);
+    }
+
+    showQuestion();
+    startTimer();
+  </script>
+</body>
+</html>

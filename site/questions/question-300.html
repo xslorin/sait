@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вопросы по 300</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <div id="app">
+    <h1>Вопросы по 300</h1>
+    <div id="question-number">Вопрос: <span id="current-question">1</span>/15</div>
+    <div id="question">
+      <h2 id="question-text"></h2>
+      <div id="answers">
+        <button onclick="checkAnswer(0)" id="answer-0"></button>
+        <button onclick="checkAnswer(1)" id="answer-1"></button>
+        <button onclick="checkAnswer(2)" id="answer-2"></button>
+      </div>
+      <div id="explanation" class="explanation"></div>
+      <button id="next-question" style="display: none;" onclick="nextQuestion()">Следующий вопрос</button>
+    </div>
+    <div id="timer" class="timer">Осталось: 10:00</div>
+    <a href="../index.html" class="back-link">Назад</a>
+  </div>
+  <script>
+    const questions = [
+      {
+        question: "Кто был первым президентом России?",
+        answers: ["Борис Ельцин", "Михаил Горбачев", "Владимир Путин"],
+        correct: 0,
+        explanation: "Борис Ельцин был первым президентом России."
+      },
+      {
+        question: "Кто был главнокомандующим Черноморского флота?",
+        answers: ["Федор Ушаков", "Александр Суворов", "Михаил Кутузов"],
+        correct: 0,
+        explanation: "Федор Ушаков был главнокомандующим Черноморского флота."
+      },
+      {
+        question: "Кто был первым маршалом России?",
+        answers: ["Георгий Жуков", "Александр Василевский", "Константин Рокоссовский"],
+        correct: 0,
+        explanation: "Георгий Жуков был первым маршалом России."
+      },
+      {
+        question: "Кто был первым космонавтом?",
+        answers: ["Юрий Гагарин", "Герман Титов", "Алексей Леонов"],
+        correct: 0,
+        explanation: "Юрий Гагарин был первым космонавтом."
+      },
+      {
+        question: "Кто был первым министром обороны России?",
+        answers: ["Дмитрий Рогозин", "Павел Грачев", "Сергей Шойгу"],
+        correct: 1,
+        explanation: "Павел Грачев был первым министром обороны России."
+      },
+      {
+        question: "Кто был первым главнокомандующим Красной Армии?",
+        answers: ["Михаил Фрунзе", "Климент Ворошилов", "Лаврентий Берия"],
+        correct: 1,
+        explanation: "Климент Ворошилов был первым главнокомандующим Красной Армии."
+      },
+      {
+        question: "Кто был первым человеком, ступившим на Луну?",
+        answers: ["Нил Армстронг", "Юрий Гагарин", "Базз Олдрин"],
+        correct: 0,
+        explanation: "Нил Армстронг был первым человеком, ступившим на Луну."
+      },
+      {
+        question: "Кто был первым русским императором?",
+        answers: ["Петр I", "Иван IV", "Николай II"],
+        correct: 0,
+        explanation: "Петр I был первым русским императором."
+      },
+      {
+        question: "Кто был первым человеком, совершившим прыжок с парашютом?",
+        answers: ["Леонардо да Винчи", "Жак-Ив Кусто", "Фридрих фон Лихтенштейн"],
+        correct: 2,
+        explanation: "Фридрих фон Лихтенштейн был первым человеком, совершившим прыжок с парашютом."
+      },
+      {
+        question: "Кто был первым человеком, совершившим кругосветное путешествие?",
+        answers: ["Фернан Магеллан", "Христофор Колумб", "Васко да Гама"],
+        correct: 0,
+        explanation: "Фернан Магеллан был первым человеком, совершившим кругосветное путешествие."
+      },
+      {
+        question: "Кто был первым человеком, совершившим полет на воздушном шаре?",
+        answers: ["Жак Шарль", "Жан-Франсуа Пилатр де Розье", "Бенджамин Франклин"],
+        correct: 1,
+        explanation: "Жан-Франсуа Пилатр де Розье был первым человеком, совершившим полет на воздушном шаре."
+      },
+      {
+        question: "Кто был первым человеком, совершившим прыжок с парашютом с самолета?",
+        answers: ["Алексей Гриценко", "Фридрих фон Лихтенштейн", "Жак-Ив Кусто"],
+        correct: 0,
+        explanation: "Алексей Гриценко был первым человеком, совершившим прыжок с парашютом с самолета."
+      },
+      {
+        question: "Кто был первым человеком, совершившим прыжок с парашютом с воздушного шара?",
+        answers: ["Фридрих фон Лихтенштейн", "Жан-Франсуа Пилатр де Розье", "Алексей Гриценко"],
+        correct: 0,
+        explanation: "Фридрих фон Лихтенштейн был первым человеком, совершившим прыжок с парашютом с воздушного шара."
+      },
+      {
+        question: "Кто был первым человеком, совершившим полет на дирижабле?",
+        answers: ["Альберто Сантос-Дюмон", "Граф Цеппелин", "Жак Шарль"],
+        correct: 1,
+        explanation: "Граф Цеппелин был первым человеком, совершившим полет на дирижабле."
+      },
+      {
+        question: "Кто был первым человеком, совершившим прыжок с парашютом с воздушного шара?",
+        answers: ["Фридрих фон Лихтенштейн", "Жан-Франсуа Пилатр де Розье", "Алексей Гриценко"],
+        correct: 0,
+        explanation: "Фридрих фон Лихтенштейн был первым человеком, совершившим прыжок с парашютом с воздушного шара."
+      }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let timer;
+    let totalTime = 600; // Общее время для всей викторины (10 минут)
+
+    function showQuestion() {
+      const question = questions[currentQuestionIndex];
+      document.getElementById('question-text').textContent = question.question;
+      document.getElementById('answer-0').textContent = question.answers[0];
+      document.getElementById('answer-1').textContent = question.answers[1];
+      document.getElementById('answer-2').textContent = question.answers[2];
+      document.getElementById('current-question').textContent = currentQuestionIndex + 1;
+      document.getElementById('next-question').style.display = 'none'; // Скрываем кнопку "Следующий вопрос"
+      // Разблокируем кнопки для текущего вопроса
+      document.querySelectorAll('button').forEach(btn => btn.disabled = false);
+    }
+
+    function checkAnswer(selectedIndex) {
+      const question = questions[currentQuestionIndex];
+      if (selectedIndex === question.correct) {
+        score += 10; // Добавляем 10 очков за правильный ответ
+        alert('Правильно!');
+        nextQuestion(); // Переходим к следующему вопросу
+      } else {
+        // Объяснение, почему правильный ответ именно такой
+        document.getElementById('explanation').textContent = `Правильный ответ: ${question.answers[question.correct]}. ${question.explanation}`;
+        // Блокируем кнопки текущего вопроса
+        document.querySelectorAll('#answers button').forEach(btn => btn.disabled = true);
+        // Показываем кнопку "Следующий вопрос"
+        document.getElementById('next-question').style.display = 'block';
+      }
+    }
+
+    function nextQuestion() {
+      currentQuestionIndex++;
+      if (currentQuestionIndex < questions.length && totalTime > 0) {
+        showQuestion(); // Переходим к следующему вопросу
+      } else {
+        clearInterval(timer);
+        alert(`Вы ответили правильно на ${score / 10} из 15 вопросов и заработали ${score} очков!`);
+        localStorage.setItem('score-300', score); // Сохраняем очки за вопросы по 300
+        window.location.href = '../index.html'; // Переходим на главную страницу после завершения викторины
+      }
+    }
+
+    function startTimer() {
+      timer = setInterval(() => {
+        totalTime--;
+        if (totalTime <= 0) {
+          clearInterval(timer);
+          alert('Время вышло!');
+          nextQuestion(); // Переходим к следующему вопросу, если время вышло
+        } else {
+          const minutes = Math.floor(totalTime / 60);
+          const seconds = totalTime % 60;
+          document.getElementById('timer').textContent = `Осталось: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        }
+      }, 1000);
+    }
+
+    showQuestion();
+    startTimer();
+  </script>
+</body>
+</html>

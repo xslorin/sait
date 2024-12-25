@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вопросы по 400</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+  <div id="app">
+    <h1>Вопросы по 400</h1>
+    <div id="question-number">Вопрос: <span id="current-question">1</span>/15</div>
+    <div id="question">
+      <h2 id="question-text"></h2>
+      <div id="answers">
+        <button onclick="checkAnswer(0)" id="answer-0"></button>
+        <button onclick="checkAnswer(1)" id="answer-1"></button>
+        <button onclick="checkAnswer(2)" id="answer-2"></button>
+      </div>
+      <div id="explanation" class="explanation"></div>
+      <button id="next-question" style="display: none;" onclick="nextQuestion()">Следующий вопрос</button>
+    </div>
+    <div id="timer" class="timer">Осталось: 10:00</div>
+    <a href="../index.html" class="back-link">Назад</a>
+  </div>
+  <script>
+    const questions = [
+      {
+        question: "Кто из этих советских лётчиков стал самым результативным асом Второй мировой войны?",
+        answers: ["Иван Кожедуб", "Александр Покрышкин", "Николай Гастелло"],
+        correct: 1,
+        explanation: "Александр Покрышкин. Он сбил более 59 вражеских самолётов."
+      },
+      {
+        question: "Кто был командиром полка, который первым ворвался в Рейхстаг в 1945 году?",
+        answers: ["Михаил Егоров", "Александр Пересвет", "Иван Кожедуб"],
+        correct: 0,
+        explanation: "Михаил Егоров был командиром полка, который первым ворвался в Рейхстаг."
+      },
+      {
+        question: "Кто был главным маршалом авиации во время Второй мировой войны?",
+        answers: ["Александр Новиков", "Александр Егоров", "Александр Покрышкин"],
+        correct: 2,
+        explanation: "Александр Покрышкин был главным маршалом авиации во время Второй мировой войны."
+      },
+      {
+        question: "Кто был командующим Черноморским флотом во время Второй мировой войны?",
+        answers: ["Федор Ушаков", "Иван Исаков", "Николай Кузнецов"],
+        correct: 1,
+        explanation: "Иван Исаков был командующим Черноморским флотом во время Второй мировой войны."
+      },
+      {
+        question: "Кто был командиром партизанского отряда в Белоруссии?",
+        answers: ["Александр Матросов", "Виктор Тихонов", "Александр Сапунов"],
+        correct: 0,
+        explanation: "Александр Матросов был командиром партизанского отряда в Белоруссии."
+      },
+      {
+        question: "Кто был командующим армией, которая освободила Будапешт?",
+        answers: ["Федор Толбухин", "Иван Конев", "Родион Малиновский"],
+        correct: 2,
+        explanation: "Родион Малиновский был командующим армией, которая освободила Будапешт."
+      },
+      {
+        question: "Кто был командиром дивизии, которая первой ворвалась в Берлин?",
+        answers: ["Иван Черняховский", "Василий Чуйков", "Георгий Жуков"],
+        correct: 0,
+        explanation: "Иван Черняховский был командиром дивизии, которая первой ворвалась в Берлин."
+      },
+      {
+        question: "Кто был командующим армией, которая освободила Варшаву?",
+        answers: ["Константин Рокоссовский", "Иван Конев", "Георгий Жуков"],
+        correct: 0,
+        explanation: "Константин Рокоссовский был командующим армией, которая освободила Варшаву."
+      },
+      {
+        question: "Кто был командиром дивизии, которая освободила Прагу?",
+        answers: ["Иван Баграмян", "Иван Конев", "Георгий Жуков"],
+        correct: 1,
+        explanation: "Иван Конев был командиром дивизии, которая освободила Прагу."
+      },
+      {
+        question: "Кто был командующим армией, которая освободила Белград?",
+        answers: ["Федор Толбухин", "Иван Конев", "Георгий Жуков"],
+        correct: 0,
+        explanation: "Федор Толбухин был командующим армией, которая освободила Белград."
+      },
+      {
+        question: "Кто из этих людей был первой женщиной, получившей звание Героя Советского Союза во время Второй мировой войны?",
+        answers: ["Надежда Космодемьянская", "Людмила Павличенко", "Мария Поливанова"],
+        correct: 0,
+        explanation: "Надежда Космодемьянская. Она была партизанкой и первой женщиной, удостоенной этого звания."
+      },
+      {
+        question: "Какой советский подводник стал героем за свои действия в Балтийском море?",
+        answers: ["Александр Маринеско", "Владимир Кожин", "Иван Скурихин"],
+        correct: 2,
+        explanation: "Иван Скурихин. Он потопил более 16 вражеских кораблей."
+      },
+      {
+        question: "Какой советский лётчик стал героем за свои действия в битве за Москву?",
+        answers: ["Константин Мерецков", "Григорий Речкалов", "Сергей Горшков"],
+        correct: 1,
+        explanation: "Григорий Речкалов. Он сбил более 53 вражеских самолёта."
+      },
+      {
+        question: "Какой советский разведчик был известен как Красный Орфей?",
+        answers: ["Рихард Зорге", "Николай Кузнецов", "Владимир Берия"],
+        correct: 0,
+        explanation: "Рихард Зорге. Он работал в Японии и Германии."
+      },
+      {
+        question: "Какой советский разведчик передал секретные документы о немецком вторжении в СССР?",
+        answers: ["Николай Кузнецов", "Георгий Жуков", "Лев Миронов"],
+        correct: 0,
+        explanation: "Николай Кузнецов. Он передал данные о нападении."
+      }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let timer;
+    let totalTime = 600; // Общее время для всей викторины (10 минут)
+
+    function showQuestion() {
+      const question = questions[currentQuestionIndex];
+      document.getElementById('question-text').textContent = question.question;
+      document.getElementById('answer-0').textContent = question.answers[0];
+      document.getElementById('answer-1').textContent = question.answers[1];
+      document.getElementById('answer-2').textContent = question.answers[2];
+      document.getElementById('current-question').textContent = currentQuestionIndex + 1;
+      document.getElementById('next-question').style.display = 'none'; // Скрываем кнопку "Следующий вопрос"
+      // Разблокируем кнопки для текущего вопроса
+      document.querySelectorAll('button').forEach(btn => btn.disabled = false);
+    }
+
+    function checkAnswer(selectedIndex) {
+      const question = questions[currentQuestionIndex];
+      if (selectedIndex === question.correct) {
+        score += 10; // Добавляем 40 очков за правильный ответ
+        alert('Правильно!');
+        nextQuestion(); // Переходим к следующему вопросу
+      } else {
+        // Объяснение, почему правильный ответ именно такой
+        document.getElementById('explanation').textContent = `Правильный ответ: ${question.answers[question.correct]}. ${question.explanation}`;
+        // Блокируем кнопки текущего вопроса
+        document.querySelectorAll('#answers button').forEach(btn => btn.disabled = true);
+        // Показываем кнопку "Следующий вопрос"
+        document.getElementById('next-question').style.display = 'block';
+      }
+    }
+
+    function nextQuestion() {
+      currentQuestionIndex++;
+      if (currentQuestionIndex < questions.length && totalTime > 0) {
+        showQuestion(); // Переходим к следующему вопросу
+      } else {
+        clearInterval(timer);
+        alert(`Вы ответили правильно на ${score / 40} из 15 вопросов и заработали ${score} очков!`);
+        localStorage.setItem('score-400', score); // Сохраняем очки за вопросы по 400
+        window.location.href = '../index.html'; // Переходим на главную страницу после завершения викторины
+      }
+    }
+
+    function startTimer() {
+      timer = setInterval(() => {
+        totalTime--;
+        if (totalTime <= 0) {
+          clearInterval(timer);
+          alert('Время вышло!');
+          nextQuestion(); // Переходим к следующему вопросу, если время вышло
+        } else {
+          const minutes = Math.floor(totalTime / 60);
+          const seconds = totalTime % 60;
+          document.getElementById('timer').textContent = `Осталось: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        }
+      }, 1000);
+    }
+
+    showQuestion();
+    startTimer();
+  </script>
+</body>
+</html>

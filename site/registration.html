@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Регистрация</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <h1>Регистрация</h1>
+    <form id="registration-form">
+      <label for="last-name">Фамилия:</label>
+      <input type="text" id="last-name" name="last-name" required><br><br>
+
+      <label for="first-name">Имя:</label>
+      <input type="text" id="first-name" name="first-name" required><br><br>
+
+      <label for="group">Группа:</label>
+      <input type="text" id="group" name="group" required><br><br>
+
+      <button type="submit">Отправить</button>
+    </form>
+    <a href="index.html" class="back-link">Назад</a>
+  </div>
+  <script>
+    document.getElementById('registration-form').addEventListener('submit', function(event) {
+      event.preventDefault(); // Предотвращаем перезагрузку страницы
+
+      // Получаем данные из формы
+      const lastName = document.getElementById('last-name').value;
+      const firstName = document.getElementById('first-name').value;
+      const group = document.getElementById('group').value;
+
+      // Сохраняем данные в localStorage
+      localStorage.setItem('userLastName', lastName);
+      localStorage.setItem('userFirstName', firstName);
+      localStorage.setItem('userGroup', group);
+
+      // Переходим на главную страницу
+      alert('Регистрация прошла успешно!');
+      window.location.href = 'index.html';
+    });
+  </script>
+</body>
+</html>
